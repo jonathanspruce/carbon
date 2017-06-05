@@ -1,3 +1,17 @@
+# 1.2.0
+
+## Linting Updates
+
+The following components have had minor internal changes to satisfy the introduction of stricter linting rules:
+
+* Checkbox
+* Fieldset
+* GroupedCharacter
+* InlineInputs
+* RadioButton
+* Textarea
+* Textbox
+
 # 1.1.0
 
 ## Package Updates
