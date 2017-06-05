@@ -9,4 +9,3 @@ deploy/assets/**/*
 .browser-preferences/
 .idea
 yarn.lock
-lib
