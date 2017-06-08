@@ -9,6 +9,13 @@ The following components have had minor internal changes to satisfy the introduc
 * Dropdown
 * DropdownFilter
 * DropdownFilterAjax
+* Checkbox
+* Fieldset
+* GroupedCharacter
+* InlineInputs
+* RadioButton
+* Textarea
+* Textbox
 
 ## Component Improvements
 
