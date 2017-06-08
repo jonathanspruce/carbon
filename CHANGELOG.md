@@ -25,6 +25,17 @@ The following components have had minor internal changes to satisfy the introduc
 * NavigationBar
 * SubmenuBlock
 * Tabs
+* AppWrapper
+* Column
+* Content
+* Heading
+* Detail
+* I18n
+* MountInApp
+* Pod
+* Row
+* SettingsRow
+* ShowEditPod
 
 ## Component Improvements
 
