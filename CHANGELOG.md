@@ -16,6 +16,15 @@ The following components have had minor internal changes to satisfy the introduc
 * RadioButton
 * Textarea
 * Textbox
+* Carousel
+* Link
+* Menu
+* MenuItem
+* MenuList
+* MenuListItem
+* NavigationBar
+* SubmenuBlock
+* Tabs
 
 ## Component Improvements
 
