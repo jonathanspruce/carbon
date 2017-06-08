@@ -6,6 +6,9 @@ The following components have had minor internal changes to satisfy the introduc
 
 * Date
 * DateRange
+* Dropdown
+* DropdownFilter
+* DropdownFilterAjax
 
 ## Component Improvements
 
