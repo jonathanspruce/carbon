@@ -212,6 +212,8 @@ class DropdownFilterAjax extends DropdownFilter {
    */
   getData = (query = '', page = 1) => {
     this.setState({ requesting: true });
+    console.log('xxx');
+    console.log(XMLHttpRequest);
     Request
       .get(this.props.path)
       .query({

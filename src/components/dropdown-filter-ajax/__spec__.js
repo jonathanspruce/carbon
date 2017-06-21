@@ -206,19 +206,21 @@ describe('DropdownFilterAjax', () => {
   });
 
   describe('getData', () => {
-    beforeEach(() => {
-      jasmine.Ajax.install();
-    });
+    // beforeEach(() => {
+    //   jasmine.Ajax.install();
+    // });
+    //
+    // afterEach(() => {
+    //   jasmine.Ajax.uninstall();
+    // });
 
-    afterEach(() => {
-      jasmine.Ajax.uninstall();
-    });
-
-    describe('if data is not explicitly passed', () => {
+    fdescribe('if data is not explicitly passed', () => {
       it('calls the correct query', () => {
+        console.log('aaa');
+        jasmine.Ajax.install();
         instance.getData();
-        let request = jasmine.Ajax.requests.mostRecent();
-        expect(request.url).toEqual("/foobar?page=1&rows=25&value=");
+        // let request = jasmine.Ajax.requests.mostRecent();
+        // expect(request.url).toEqual("/foobar?page=1&rows=25&value=");
       });
     });
 
