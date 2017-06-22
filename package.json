@@ -1,6 +1,6 @@
 {
   "jest": {
-    "preset": "carbon-factory/jest-config.json",
+    "preset": "carbon-factory/jest.conf.json",
     "setupTestFrameworkScriptFile": "./setup.js"
   },
   "name": "carbon-react",
