@@ -19,15 +19,17 @@ let definition = new Definition('radio-button', RadioButton, {
     'checked'
   ],
   propTypes: {
-    reverse: 'Boolean',
-    checked: 'Boolean'
+    checked: 'Boolean',
+    className: 'String',
+    reverse: 'Boolean'
   },
   propValues: {
-    name: "example"
+    name: 'example'
   },
   propDescriptions: {
-    reverse: 'Flips the input and label render order',
-    checked: 'Determines if the radio button is checked. This can be used for external control of the radio button'
+    className: 'Classes to apply to the component.',
+    checked: 'Determines if the radio button is checked. This can be used for external control of the radio button',
+    reverse: 'Flips the input and label render order'
   }
 });
 

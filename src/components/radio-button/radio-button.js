@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Input from './../../utils/decorators/input';
 import InputLabel from './../../utils/decorators/input-label';
 import InputValidation from './../../utils/decorators/input-validation';
 import { validProps } from '../../utils/ether';
-import { tagComponent } from '../../utils/helpers/tags';
+import tagComponent from '../../utils/helpers/tags';
 
 /**
  * A radiobutton widget.
@@ -37,8 +38,30 @@ const RadioButton = Input(InputLabel(InputValidation(
 class RadioButton extends React.Component {
 
   static propTypes = {
-    reverse: React.PropTypes.bool,
-    checked: React.PropTypes.bool
+    checked: React.PropTypes.bool,
+
+    /**
+     * A custom class name for the component.
+     *
+     * @property className
+     * @type {String}
+     */
+    className: PropTypes.string,
+
+    /**
+     * Displays fieldHelp inline with the radio button.
+     *
+     * @property fieldHelpInline
+     * @type {Boolean}
+     */
+    fieldHelpInline: PropTypes.bool,
+
+    reverse: React.PropTypes.bool
+  }
+
+  static defaultProps = {
+    className: '',
+    fieldHelpInline: false
   }
 
   /**
@@ -48,7 +71,7 @@ class RadioButton extends React.Component {
    * @return {String} Main className
    */
   get mainClasses() {
-    return classNames (
+    return classNames(
       'carbon-radio-button',
       this.props.className
     );
@@ -87,9 +110,9 @@ class RadioButton extends React.Component {
    * @return {Object} Props to be applied to the input
    */
   get inputProps() {
-    let { ...props } = validProps(this);
+    const { ...props } = validProps(this);
     props.className = this.inputClasses;
-    props.type = "radio";
+    props.type = 'radio';
     return props;
   }
 
@@ -129,7 +152,12 @@ class RadioButton extends React.Component {
    * @return {Object} JSX additional content inline with input
    */
   get additionalInputContent() {
-    return <div className="carbon-radio-button__sprite" dangerouslySetInnerHTML={{ __html: this.radiobuttonSprite }}></div>;
+    return (
+      <div
+        className='carbon-radio-button__sprite'
+        dangerouslySetInnerHTML={ { __html: this.radiobuttonSprite } } // eslint-disable react/no-danger
+      />
+    );
   }
 
   /**

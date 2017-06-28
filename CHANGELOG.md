@@ -1,16 +1,191 @@
 # 1.2.0
 
+## Dependency Upgrade
+
+* Carbon Factory has been upgraded to Version v1.1.7
+
 ## Linting Updates
 
-The following components have had minor internal changes to satisfy the introduction of stricter linting rules:
+The following have had minor internal changes to satisfy the introduction of stricter linting rules:
 
+### Components
+
+* AppWrapper
+* Carousel
+* Checkbox
+* Column
+* Content
+* Create
 * Date
 * DateRange
+* Decimal
+* Detail
+* Dropdown
+* DropdownFilter
+* DropdownFilterAjax
+* Fieldset
+* GroupedCharacter
+* Heading
+* Help
+* I18n
+* Icon
+* Link
+* Menu
+* MenuItem
+* MenuList
+* MenuListItem
+* MultiStepWizard
+* Message
+* Modal
+* MountInApp
+* NavigationBar
+* NumberInput
+* Pager
+* Pill
+* Pod
+* Portrait
+* Profile
+* RadioButton
+* Rainbow :warning: The ref for the highchart instance is now `_chart`. This will need updating where Rainbow is used.
+* Row
+* SettingsRow
+* ShowEditPod
+* Sidebar
+* Sidebar Header
+* SimpleColorPicker
+* Spinner
+* SubmenuBlock
+* Tabs
+* Textarea
+* Textbox
+* Toast
+* Tooltip
+
+The following utils have had minor internal changes to satisfy the introduction of stricter linting rules:
+
+* Browser
+* CSS
+* Ether
+* Flux
+* Handlers
+* Helpers
+* Logger
+* Promises
+* Router
+* Service
+* Should Component Update decorator
+* Tooltip Decorator
+* Validators
+
+## DraggableContext, WithDrag & WithDrop
+
+We now provide a series of components to enable drag and drop functionality. For example:
+
+```
+<DraggableContext onDrag={ onItemMoved }>
+  <ol>
+    {
+      items.map((item, index) => {
+        return (
+          <WithDrop key={ index } index={ index }>
+            <li>
+              <WithDrag><span>{ item.content }</span></WithDrag>
+            </li>
+          </WithDrop>
+        );
+      });
+    }
+  </ol>
+</DraggableContext>
+```
+
+The `onDrag` prop can manipulate the order of items as they are dragged. It is a function that receives two arguments: `dragIndex`, which is the original position of the item, and `hoverIndex`, which is the position of the item if dropped.
+
+An example function signature: `onItemMoved = (dragIndex, hoverIndex) => { }`
+
+## Draggable Table Rows
+
+The `TableRow` component now supports drag and drop. To enable it you need to add a `DraggableContext` component, apply an index to each `TableRow`, and define the `onDrag` prop to manipulate the order as it changes:
+
+```
+<Table tbody={ false }>
+  <DraggableContext onDrag={ onRowMoved }>
+    <tbody>
+      {
+        rows.map((row, index) => {
+          return (
+            <TableRow key={ index } index={ index }>
+              { row.content }
+            </TableRow>
+          );
+        });
+      }
+    </tbody>
+  </DraggableContext>
+</Table>
+```
+
+## Text Helpers
+
+A new helper object is available in `utils/helpers/text`. Currently it only contains one method `clearSelection`, which clears any selected text on the page.
+
+### utils
+
+#### helpers
+
+* Date
+* Devices
+* Events
+* GUID
+* i18n
 
 ## Component Improvements
 
+* `Alert` now alerts itself to screen readers.
+* `Browser`: add a new method `setInputFocus` to focus on the input field of passed in ref but does not select text
+* `Form` now has default `SaveButton` and `CancelButton` functional stateless componenents. The former can be overriden with a new prop of `customSaveButton`.
+* `InlineInputs` children are now wrapped in Columns by the component.
 * `Menu` has been updated to use a `<nav>` tag as its root element.
+* `MenuItem`: focus outline is now fully visible when an item is focused.
+* `MultiActionButton`: Secondary button hover style has been updated to not change on hover.
 * `TableHeader`: improve accessibility of sortable columns. They can now receive focus via the keyboard, and include `aria-sort` and `aria-label` attributes to indicate they are sortable, the current sort direction, and which direction the column will be sorted when sorting is next activated.
+* `InputValidation`: now accepts a `info` prop to display info-styled icon and message attached to an input.
+
+### Table
+
+* `Table` can now receive an `caption` prop which renders a `<caption>` element as a child of the table element. Note that the caption is hidden by default, but still accessible to screen readers and assistive technologies.
+* `Table` has a new prop of onConfigure. Displays a configure icon to the left of the table header that triggers the callback onClick.
+
+## Bug Fixes
+
+* `DialogFullScreen` now scrolls vertically if it contains content taller than the dialog height.
+
+## Deployment Changes
+
+You can now pass `--cdn` to the gulp task to bundle assets pointing towards the CDN.
+
+## Other
+Minor changes to guides to reference `carbon-react` in imports.
+
+# 1.1.4
+
+* Update I18nhelper to respect the locale for the delimiter and separator.
+
+# 1.1.3
+
+* Fix bug with Date Range date pickers not closing correctly
+
+# 1.1.2
+
+## Component Enhancements
+
+* `Dropdown` now accepts a new optional function prop `renderItem` which will be called to render each option in the list
+
+# 1.1.1
+
+## Component Enhancements
+
+* `Content`: gets a `data-element` on its body wrapper
 
 # 1.1.0
 
