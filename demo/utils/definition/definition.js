@@ -21,7 +21,7 @@ class Definition {
     this.type = '';
 
     // define how many times the demo should be repeated
-    this.numberOfExamples = 1;
+    this.numberOfExamples = { number: 1 };
 
     // define props that will toggle a stubbed function
     this.toggleFunctions = [];

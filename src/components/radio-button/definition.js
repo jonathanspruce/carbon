@@ -14,9 +14,9 @@ let definition = new Definition('radio-button', RadioButton, {
 * Choosing one option from a highly visible small range? [Try Button Toggle](/components/button-toggle).
  `,
   type: 'form',
-  numberOfExamples: 2,
+  numberOfExamples: { number: 2, names: ['example1', 'example2'] },
   hiddenProps: [
-    'checked'
+
   ],
   propTypes: {
     checked: 'Boolean',
