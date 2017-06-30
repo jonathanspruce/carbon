@@ -56,9 +56,9 @@ class ComponentPreview extends React.Component {
     let code = this.compileCode(true),
         components = [];
 
-      const  numberOfExamples = this.props.definition.getIn(['numberOfExamples', 'number']);
-      const  names = this.props.definition.getIn(['numberOfExamples', 'names']);
-    for (let i = 0; i < numberOfExamples; i++) {
+      const  multiComponentConfig = this.props.definition.getIn(['multiComponentConfig', 'number']);
+      const  names = this.props.definition.getIn(['multiComponentConfig', 'names']);
+    for (let i = 0; i < multiComponentConfig; i++) {
       let component = React.cloneElement(code.toComponent(), { key: i, name: names.get(i)});
       components.push(component);
     }

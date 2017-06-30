@@ -18,7 +18,7 @@ let definition = new Definition('button-toggle', ButtonToggle, {
 * Need a visual? [Try Icons](/style/icons).
  `,
   type: 'action',
-  numberOfExamples: 3,
+  multiComponentConfig: { number: 3, names: ['example1', 'example2', 'example3'] },
   propOptions: {
     buttonIcon: OptionsHelper.icons,
     buttonIconSize: OptionsHelper.sizesBinary

@@ -111,6 +111,8 @@ class RadioButton extends React.Component {
    */
   get inputProps() {
     const { ...props } = validProps(this);
+    // debugger
+    props.checked = this.props.checked !== undefined ? this.props.checked : this.props.value;
     props.className = this.inputClasses;
     props.type = 'radio';
     return props;
