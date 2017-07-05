@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import I18n from 'i18n-js';
 import classNames from 'classnames';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import { isObject, isArray, forEach } from 'lodash';
 import shouldComponentUpdate from './../../utils/helpers/should-component-update';
 import Icon from './../icon';
 import Alert from './../alert';
 import Link from './../link';
-import { tagComponent } from '../../utils/helpers/tags';
+import tagComponent from '../../utils/helpers/tags';
 
 /**
  * A Flash widget.
@@ -461,20 +461,20 @@ class Flash extends React.Component {
     return (
       <div { ...tagComponent('flash', this.props) }>
         <div className={ this.classes }>
-          <ReactCSSTransitionGroup
+          <CSSTransitionGroup
             transitionName='carbon-flash__slider'
             transitionEnterTimeout={ 600 }
             transitionLeaveTimeout={ 600 }
           >
             { sliderHTML }
-            <ReactCSSTransitionGroup
+            <CSSTransitionGroup
               transitionName='carbon-flash__content'
               transitionEnterTimeout={ 800 }
               transitionLeaveTimeout={ 500 }
             >
               { flashHTML }
-            </ReactCSSTransitionGroup>
-          </ReactCSSTransitionGroup>
+            </CSSTransitionGroup>
+          </CSSTransitionGroup>
         </div>
 
         { this.dialogs }

@@ -3,8 +3,10 @@ import Bowser from 'bowser';
 import classNames from 'classnames';
 import { assign } from 'lodash';
 import PropTypes from 'prop-types';
+import Browser from './../../utils/helpers/browser';
 import Icon from './../icon';
 import Modal from './../modal';
+import Heading from './../heading';
 
 /**
  * A Dialog widget.
@@ -69,12 +71,15 @@ class Dialog extends Modal {
 
   static defaultProps = {
     size: 'medium',
-    showCloseIcon: true
+    showCloseIcon: true,
+    ariaRole: 'dialog'
   }
 
   constructor(args) {
     super(args);
     this.componentTags = this.componentTags.bind(this);
+    this.onDialogBlur = this.onDialogBlur.bind(this);
+    this.onCloseIconBlur = this.onCloseIconBlur.bind(this);
   }
 
   /**
@@ -86,7 +91,29 @@ class Dialog extends Modal {
   componentDidMount() {
     if (this.props.open) {
       this.centerDialog();
+      this.focusDialog();
     }
+  }
+
+  /**
+   * Event handler to handle keyboard
+   * focus leaving the dialog element.
+   */
+  onDialogBlur(ev) { } // eslint-disable-line no-unused-vars
+
+  /**
+   * Event handler for when the close icon
+   * loses keyboard focus.
+   *
+   * As the close icon is the last element in the dialog
+   * source, when the keyboard focus leaves the close
+   * icon return the focus to the dialog itself.
+   *
+   * @return {Void}
+   */
+  onCloseIconBlur(ev) {
+    ev.preventDefault();
+    this.focusDialog();
   }
 
   /**
@@ -99,7 +126,8 @@ class Dialog extends Modal {
    */
   get onOpening() {
     this.centerDialog();
-    window.addEventListener('resize', this.centerDialog);
+    this.focusDialog();
+    this.window().addEventListener('resize', this.centerDialog);
   }
 
   /**
@@ -111,7 +139,17 @@ class Dialog extends Modal {
    * @return {Void}
    */
   get onClosing() {
-    window.removeEventListener('resize', this.centerDialog);
+    this.window().removeEventListener('resize', this.centerDialog);
+  }
+
+  /**
+   * Returns the current window
+   *
+   * @method window
+   * @return {Object}
+   */
+  window = () => {
+    return Browser.getWindow();
   }
 
   /**
@@ -123,8 +161,11 @@ class Dialog extends Modal {
   centerDialog = () => {
     const height = this._dialog.offsetHeight / 2,
         width = this._dialog.offsetWidth / 2;
-    let midPointY = (window.innerHeight / 2) + window.pageYOffset,
-        midPointX = (window.innerWidth / 2) + window.pageXOffset;
+
+    const win = this.window();
+
+    let midPointY = (win.innerHeight / 2) + win.pageYOffset,
+        midPointX = (win.innerWidth / 2) + win.pageXOffset;
 
     midPointY -= height;
     midPointX -= width;
@@ -132,7 +173,7 @@ class Dialog extends Modal {
     if (midPointY < 20) {
       midPointY = 20;
     } else if (Bowser.ios) {
-      midPointY -= window.pageYOffset;
+      midPointY -= win.pageYOffset;
     }
 
     if (midPointX < 20) {
@@ -143,6 +184,10 @@ class Dialog extends Modal {
     this._dialog.style.left = `${midPointX}px`;
   }
 
+  focusDialog() {
+    this._dialog.focus();
+  }
+
   /**
    * Returns HTML and text for the dialog title.
    *
@@ -150,43 +195,24 @@ class Dialog extends Modal {
    * @return {String} title to display
    */
   get dialogTitle() {
-    if (this.props.title) {
-      return <h2 className={ this.dialogTitleClasses } data-element='title'>{ this.props.title }</h2>;
+    if (!this.props.title) { return null; }
+
+    let title = this.props.title;
+
+    if (typeof title === 'string') {
+      title = (
+        <Heading
+          title={ title }
+          titleId='carbon-dialog-title'
+          subheader={ this.props.subtitle }
+          subtitleId='carbon-dialog-subtitle'
+        />
+      );
     }
 
-    return null;
-  }
-
-  /**
-   * Returns HTML and text for the dialog subtitle.
-   *
-   * @method dialogSubtitle
-   * @return {String} subtitle to display
-   */
-  get dialogSubtitle() {
-    if (this.props.subtitle) {
-      return <p className={ this.dialogSubtitleClasses } data-element='subtitle'>{ this.props.subtitle }</p>;
-    }
-
-    return null;
-  }
-
-  /**
-   * Returns classes for the dialog title.
-   *
-   * @method dialogTitleClasses
-   */
-  get dialogTitleClasses() {
-    return 'carbon-dialog__title';
-  }
-
-  /**
-   * Returns classes for the dialog title.
-   *
-   * @method dialogTitleClasses
-   */
-  get dialogSubtitleClasses() {
-    return 'carbon-dialog__subtitle';
+    return (
+      <div className='carbon-dialog__title'>{ title }</div>
+    );
   }
 
   /**
@@ -227,6 +253,8 @@ class Dialog extends Modal {
           data-element='close'
           onClick={ this.props.onCancel }
           type='close'
+          tabIndex='0'
+          onBlur={ this.onCloseIconBlur }
         />
       );
     }
@@ -248,15 +276,33 @@ class Dialog extends Modal {
    * @return {Object} JSX for dialog
    */
   get modalHTML() {
+    const dialogProps = {
+      className: this.dialogClasses,
+      tabIndex: 0
+    };
+
+    if (this.props.ariaRole) {
+      dialogProps.role = this.props.ariaRole;
+    }
+
+    if (this.props.title) {
+      dialogProps['aria-labelledby'] = 'carbon-dialog-title';
+    }
+
+    if (this.props.subtitle) {
+      dialogProps['aria-describedby'] = 'carbon-dialog-subtitle';
+    }
+
     return (
       <div
         ref={ (d) => { this._dialog = d; } }
-        className={ this.dialogClasses }
+        { ...dialogProps }
         { ...this.componentTags(this.props) }
+        onBlur={ this.onDialogBlur }
       >
-        { this.dialogTitle }
-        { this.dialogSubtitle }
         { this.closeIcon }
+
+        { this.dialogTitle }
 
         <div className='carbon-dialog__content'>
           { this.props.children }

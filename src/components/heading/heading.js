@@ -4,13 +4,29 @@ import classNames from 'classnames';
 import Help from './../help';
 import Link from './../link';
 import Icon from './../icon';
-import { tagComponent } from '../../utils/helpers/tags';
+import tagComponent from '../../utils/helpers/tags';
 
 /**
  * UI for a heading header.
  */
 class Heading extends React.Component {
   static propTypes = {
+    /**
+     * Children elements
+     *
+     * @property children
+     * @type {Node}
+     */
+    children: PropTypes.node,
+
+    /**
+     * Custom className
+     *
+     * @property className
+     * @type {String}
+     */
+    className: PropTypes.string,
+
     /**
      * Defines the title for the heading.
      *
@@ -23,6 +39,14 @@ class Heading extends React.Component {
     ]),
 
     /**
+     * Defines the title id for the heading.
+     *
+     * @property titleId
+     * @type {String}
+     */
+    titleId: PropTypes.string,
+
+    /**
      * Defines the subheader for the heading.
      *
      * @property subheader
@@ -32,6 +56,14 @@ class Heading extends React.Component {
       PropTypes.string,
       PropTypes.object
     ]),
+
+    /**
+     * Defines the subtitle id for the heading.
+     *
+     * @property subtitleId
+     * @type {String}
+     */
+    subtitleId: PropTypes.string,
 
     /**
      * Defines the help text for the heading.
@@ -55,7 +87,10 @@ class Heading extends React.Component {
      * @property backLink
      * @type {String}
      */
-    backLink: PropTypes.string,
+    backLink: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.func
+    ]),
 
     /**
      * Adds a divider below the heading and the content.
@@ -92,7 +127,7 @@ class Heading extends React.Component {
 
     return (
       <Help
-        className="carbon-heading__help"
+        className='carbon-heading__help'
         data-element='help'
         tooltipAlign='center'
         tooltipPosition='right'
@@ -112,13 +147,21 @@ class Heading extends React.Component {
   get back() {
     if (!this.props.backLink) { return null; }
 
+    let props;
+
+    if (typeof this.props.backLink === 'string') {
+      props = { href: this.props.backLink };
+    } else {
+      props = { onClick: this.props.backLink };
+    }
+
     return (
       <Link
-        className="carbon-heading__back"
+        className='carbon-heading__back'
         data-element='back'
-        href={ this.props.backLink }
+        { ...props }
       >
-        <Icon type="chevron" />
+        <Icon type='chevron_left' />
       </Link>
     );
   }
@@ -133,7 +176,7 @@ class Heading extends React.Component {
     if (!this.props.subheader) { return null; }
 
     return (
-      <div className="carbon-heading__subheader" data-element='subtitle'>
+      <div className='carbon-heading__subheader' data-element='subtitle' id={ this.props.subtitleId }>
         { this.props.subheader }
       </div>
     );
@@ -147,10 +190,10 @@ class Heading extends React.Component {
    */
   get classes() {
     return classNames(
-      "carbon-heading", this.props.className, {
-        ["carbon-heading--has-subheader"]: this.props.subheader,
-        ["carbon-heading--has-back"]: this.props.backLink,
-        ["carbon-heading--has-divider"]: this.props.divider
+      'carbon-heading', this.props.className, {
+        'carbon-heading--has-subheader': this.props.subheader,
+        'carbon-heading--has-back': this.props.backLink,
+        'carbon-heading--has-divider': this.props.divider
       }
     );
   }
@@ -174,12 +217,12 @@ class Heading extends React.Component {
 
     return (
       <div className={ this.classes } { ...tagComponent('heading', this.props) }>
-        <div className="carbon-heading__header">
+        <div className='carbon-heading__header'>
           { this.back }
 
-          <div className="carbon-heading__headers">
-            <div className="carbon-heading__main-header">
-              <h1 className="carbon-heading__title" data-element='title'>
+          <div className='carbon-heading__headers'>
+            <div className='carbon-heading__main-header'>
+              <h1 className='carbon-heading__title' data-element='title' id={ this.props.titleId }>
                 { this.props.title }
               </h1>
 

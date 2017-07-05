@@ -1,8 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-dom/test-utils';
-import Dialog from 'components/dialog'
+import { shallow, mount } from 'enzyme';
 import Alert from './alert';
-import { shallow } from 'enzyme';
 import { elementsTagTest, rootTagTest } from '../../utils/helpers/tags/tags-specs';
 
 describe('Alert', () => {
@@ -16,12 +15,6 @@ describe('Alert', () => {
         open={ true }
         title="Alert title" />
     );
-  });
-
-  describe('dialogTitleClasses', () => {
-    it('return the dialog title class along with the alert title class', () => {
-      expect(instance.dialogTitleClasses).toEqual('carbon-dialog__title carbon-alert__title');
-    });
   });
 
   describe('dialogClasses', () => {
@@ -40,13 +33,56 @@ describe('Alert', () => {
     });
 
     describe("on internal elements", () => {
-      let wrapper = shallow(<Alert open={ true } title='Test' subtitle='Test' showCloseIcon={ true } />);
+      let wrapper = mount(<Alert open={ true } title='Test' subtitle='Test' showCloseIcon={ true } />);
 
       elementsTagTest(wrapper, [
         'close',
         'subtitle',
         'title'
       ]);
+    });
+  });
+
+  describe('keyboard focus', () => {
+    let wrapper;
+    let mockEvent;
+
+    beforeEach(() => {
+      wrapper = mount(
+        <Alert open={ true } title='Test' subtitle='Test' showCloseIcon={ false } />
+      );
+
+      mockEvent = {
+        preventDefault() {}
+      };
+
+      jasmine.clock().install();
+    });
+
+    afterEach(() => {
+      jasmine.clock().uninstall();
+    });
+
+    it('remains on the dialog if open and no close icon is shown', () => {
+      const instance = wrapper.instance();
+      spyOn(mockEvent, 'preventDefault');
+      spyOn(instance, 'focusDialog');
+
+      instance.onDialogBlur(mockEvent);
+      jasmine.clock().tick(10);
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      expect(instance.focusDialog).toHaveBeenCalled();
+    });
+
+    it('does not remain on the dialog if close icon is shown', () => {
+      wrapper.setProps({
+        showCloseIcon: true
+      });
+
+      spyOn(mockEvent, 'preventDefault');
+
+      wrapper.instance().onDialogBlur(mockEvent);
+      expect(mockEvent.preventDefault).not.toHaveBeenCalled();
     });
   });
 });

@@ -1,4 +1,5 @@
 import ComponentActions from './../../../actions/component';
+import OptionsHelper from '../../../../src/utils/helpers/options-helper';
 import { assign } from 'lodash';
 
 export default (definition) => {
@@ -17,11 +18,11 @@ function buildRows() {
   // create rows array with header row:
   let rows = [
     <TableRow key='header' as='header'>
-      <TableHeader sortable={ true } name='name'>
+      <TableHeader sortable={ true } name='name' scope='col'>
         Country
       </TableHeader>
 
-      <TableHeader>Code</TableHeader>
+      <TableHeader scope='col'>Code</TableHeader>
     </TableRow>
   ];
 
@@ -40,12 +41,14 @@ function buildRows() {
 
   definition.propTypes = assign({}, definition.propTypes, {
     actions: 'Object',
+    caption: 'String',
     currentPage: 'String',
     children: 'Node',
     className: 'String',
     filter: 'Object',
     highlightable: 'Boolean',
     onChange: 'Function',
+    onConfigure: 'Function',
     onHighlight: 'Function',
     onPageSizeChange: 'Function',
     onSelect: 'Function',
@@ -59,16 +62,19 @@ function buildRows() {
     sortedColumn: 'String',
     tbody: 'Node',
     thead: 'Node',
+    theme: 'String',
     totalRecords: 'String'
   });
   definition.propDescriptions = assign({}, definition.propDescriptions, {
     actions: 'Specify actions to be used by the ActionToolbar component.',
+    caption: 'Specify a visually hidden title for the table',
     currentPage: 'Controls the current page number of a paginated data set.',
     children: 'This component supports children.',
     className: 'Classes to apply to the component.',
     filter: "An object of filtered data. Each key in the object should match with the key of one of the table's columns.",
     highlightable: 'Makes each row clickable/highlightable. Works well with the onHighlight callback.',
     onChange: "Triggered whenever any of the table's display is updated - for example if sort order changes, pagination changes or the filter changes. It will trigger your callback with all of the information required to manually filter/sort your data in your external data source.",
+    onConfigure: 'Enable configure icon that triggers this callback on click',
     onHighlight: 'Triggered when a row is highlighted via the highlightable prop. It will provide you with the row index.',
     onPageSizeChange: 'Triggered when the page size is changed.',
     onSelect: 'Triggered when a row is selected via the selectable prop. It will provide you with an array of all of the currently selected rows.',
@@ -82,6 +88,10 @@ function buildRows() {
     sortedColumn: 'The currently sorted column.',
     tbody: 'Instead of passing children, define your tbody as a prop.',
     thead: 'Instead of passing children, define your thead as a prop. Using this prop will put your header inside an HTML thead element.',
+    theme: 'Allows the table to be set to primary or secondary. Primary is darker and more bold, while secondary is lighter and doesn\'t use tiger stripes',
     totalRecords: 'Tracks the total number of records of a paginated data set.'
   });
+  definition.propOptions = {
+    theme: OptionsHelper.themesBinary,
+  };
 };

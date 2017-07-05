@@ -25,19 +25,17 @@ import Dialog from '../dialog';
 class Alert extends Dialog {
 
   static defaultProps = assign({}, Dialog.defaultProps, {
+    role: 'alertdialog',
     size: 'extra-small'
   })
 
-  /**
-   * Returns classes title for the confirm, combines with dialog class names.
-   *
-   * @method dialogTitleClasses
-   */
-  get dialogTitleClasses() {
-    return classNames(
-      super.dialogTitleClasses,
-      'carbon-alert__title'
-    );
+  constructor(props) {
+    super(props);
+    // focusDialog is called via setTimeout in onDialogBlur,
+    // so it needs binding to this
+    // From the React docs: "Generally, if you refer to a method without () after
+    // it, such as onClick={this.handleClick}, you should bind that method."
+    this.focusDialog = this.focusDialog.bind(this);
   }
 
   /**
@@ -58,6 +56,27 @@ class Alert extends Dialog {
       'data-element': props['data-element'],
       'data-role': props['data-role']
     };
+  }
+
+  /**
+   * Handles keyboard focus leaving the dialog
+   * element.
+   *
+   * Assumes that, if no close icon is displayed,
+   * no other element can receive keyboard focus.
+   * Therefore focus should remain on the dialog
+   * element while it is open.
+   *
+   * @override
+   * @return {Void}
+   */
+  onDialogBlur(ev) {
+    if (!this.props.showCloseIcon) {
+      ev.preventDefault();
+      // Firefox loses focus unless we wrap the call to
+      // this.focusDialog in setTimeout
+      setTimeout(this.focusDialog);
+    }
   }
 }
 

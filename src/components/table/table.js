@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import classNames from 'classnames';
 import Immutable from 'immutable';
 import I18n from 'i18n-js';
 import ActionToolbar from './../action-toolbar';
+import Icon from './../icon';
+import Link from './../link';
 import TableRow from './table-row';
 import TableCell from './table-cell';
 import TableHeader from './table-header';
 import TableSubheader from './table-subheader';
+import DraggableTableCell from './draggable-table-cell';
 import Pager from './../pager';
 import Spinner from './../spinner';
 
@@ -120,6 +123,14 @@ class Table extends React.Component {
      * @type {Function}
      */
     onChange: PropTypes.func,
+
+    /**
+     * Enable configure icon that triggers this callback on click
+     *
+     * @property onConfigure
+     * @type {Function}
+     */
+    onConfigure: PropTypes.func,
 
     /**
      * Show the pagination footer
@@ -252,7 +263,24 @@ class Table extends React.Component {
      * @property tbody
      * @type {Object}
      */
-    tbody: PropTypes.bool
+    tbody: React.PropTypes.bool,
+
+    /**
+     * A string to render as the table's caption
+     *
+     * @property caption
+     * @type string
+     */
+    caption: React.PropTypes.string,
+
+    /**
+     * Renders as light or dark
+     * Uses common theme definition of 'primary' (dark, default) and 'secondary' (light)
+     *
+     * @property theme
+     * @type string
+     */
+    theme: React.PropTypes.string
   }
 
   static childContextTypes = {
@@ -276,6 +304,10 @@ class Table extends React.Component {
     highlightable: PropTypes.bool, // table can enable all rows to be highlightable
     sortOrder: PropTypes.string, // the current sort order applied
     sortedColumn: PropTypes.string // the currently sorted column
+  }
+
+  static defaultProps = {
+    theme: 'primary'
   }
 
   state = {
@@ -843,7 +875,8 @@ class Table extends React.Component {
   get mainClasses() {
     return classNames(
       'carbon-table',
-      this.props.className
+      this.props.className,
+      `carbon-table--${this.props.theme}`
     );
   }
 
@@ -857,7 +890,10 @@ class Table extends React.Component {
     return classNames(
       'carbon-table__wrapper',
       this.props.className,
-      { 'carbon-table--pager': this.props.paginate }
+      {
+        'carbon-table--pager': this.props.paginate,
+        'carbon-table--configurable': this.props.onConfigure
+      }
     );
   }
 
@@ -902,6 +938,18 @@ class Table extends React.Component {
     );
   }
 
+  configureLink = (onConfigure) => {
+    if (!onConfigure) { return null; }
+
+    return (
+      <div className='carbon-table__configure-link'>
+        <Link href='#' onClick={ onConfigure }>
+          <Icon type='settings' />
+        </Link>
+      </div>
+    );
+  }
+
   /**
    * Returns a row to be used for loading.
    *
@@ -912,7 +960,7 @@ class Table extends React.Component {
     return (
       <TableRow key='__loading__' selectable={ false } highlightable={ false } hideMultiSelect>
         <TableCell colSpan='42' align='center'>
-          <ReactCSSTransitionGroup
+          <CSSTransitionGroup
             transitionName='table-loading'
             transitionEnterTimeout={ 300 }
             transitionLeaveTimeout={ 300 }
@@ -920,7 +968,7 @@ class Table extends React.Component {
             transitionAppear
           >
             <Spinner size='small' />
-          </ReactCSSTransitionGroup>
+          </CSSTransitionGroup>
         </TableCell>
       </TableRow>
     );
@@ -1005,6 +1053,21 @@ class Table extends React.Component {
   }
 
   /**
+   * Returns the caption prop wrapped in a <caption> tag,
+   * or null if no caption prop was given.
+   *
+   * @method caption
+   * @return {Object} JSX
+   */
+  get caption() {
+    if (this.props.caption) {
+      return <caption className='carbon-table__caption'>{ this.props.caption }</caption>;
+    }
+
+    return null;
+  }
+
+  /**
    * Renders the component.
    *
    * @method render
@@ -1014,7 +1077,9 @@ class Table extends React.Component {
       <div className={ this.mainClasses } { ...this.componentTags(this.props) }>
         { this.actionToolbar }
         <div className={ this.wrapperClasses } ref={ (wrapper) => { this._wrapper = wrapper; } } >
+          { this.configureLink(this.props.onConfigure) }
           <table className={ this.tableClasses } ref={ (table) => { this._table = table; } } >
+            { this.caption }
             { this.thead }
             { this.tbody }
           </table>
@@ -1030,5 +1095,6 @@ export {
   TableRow,
   TableCell,
   TableHeader,
-  TableSubheader
+  TableSubheader,
+  DraggableTableCell
 };
