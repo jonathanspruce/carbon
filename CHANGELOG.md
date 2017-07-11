@@ -1,3 +1,14 @@
+# 1.3.0
+
+## New Components
+
+* `ConfigurableColumns` Drag & Drop and disable/enable table columm data
+* `ConfigurableColumnRow` Used with ConfigurableColumns to build the list of configurable columns
+
+## New Patterns
+
+* `ConfigurableColumnsPattern` Combines ConfigurableColumns and ConfigurableColumnRow components
+
 # 1.2.1
 
 ## Linting Updates
